@@ -15,6 +15,8 @@ To be added.
 
 [Requirements](https://github.com/GToidZ/ku-polls/wiki/Requirements)
 
+[Development Plan](https://github.com/GToidZ/ku-polls/wiki/Development-Plan)
+
 ## Iterations
 
 Iteration 1 [Plan](https://github.com/GToidZ/ku-polls/wiki/Iteration-1-Plan) and [Project Board](https://github.com/users/GToidZ/projects/4/views/2)
