@@ -102,3 +102,69 @@ class TestChoiceModel(TestCase):
         choice.save()
 
         check_votes(1, 99, 0)
+
+
+class TestIndexView(TestCase):
+    client = Client()
+
+    def test_no_questions(self):
+        """No polls should be available the first time the server is set up"""
+        resp = self.client.get(reverse("polls:index"))
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, "No polls are available at this moment.")
+        self.assertQuerysetEqual(resp.context["latest_questions"], [])
+
+    def test_future_question(self):
+        """Unpublished questions should not appear in the view"""
+        question = new_question_with_relative_date("This should not be seen", 1)
+        resp = self.client.get(reverse("polls:index"))
+        self.assertContains(resp, "No polls are available at this moment.")
+        self.assertQuerysetEqual(resp.context["latest_questions"], [])
+
+    def test_multiple_question(self):
+        """Test contains past question and a future one, some should be in view"""
+        past = new_question_with_relative_date("This should be seen", -1)
+        future = new_question_with_relative_date("This should not be seen", 1)
+        resp = self.client.get(reverse("polls:index"))
+        self.assertQuerysetEqual(resp.context["latest_questions"], [past])
+
+
+class TestDetailsView(TestCase):
+    client = Client()
+
+    def test_question_with_choices(self):
+        """Published questions should have choices displayed"""
+        question = new_question_with_relative_date("Test Question")
+        choice = new_choice(question, "An ambiguous choice")
+        url = reverse("polls:details", args=(question.id,))
+        resp = self.client.get(url)
+        self.assertContains(resp, question.question_text)
+        self.assertContains(resp, choice.choice_text)
+
+    def test_future_question_should_return_404(self):
+        """Unpublished questions should return 404 for unauthorized users"""
+        question = new_question_with_relative_date("", 1)
+        url = reverse("polls:details", args=(question.id,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 404)
+
+
+class TestResultsView(TestCase):
+    client = Client()
+
+    def test_correct_vote_count_display(self):
+        question = new_question_with_relative_date("Test Question")
+        new_choice(question, "An ambiguous choice")
+        choice = question.choice_set.get(pk=1)
+        choice.vote_count += 1
+        choice.save()
+        url = reverse("polls:results", args=(question.id,))
+        resp = self.client.get(url)
+        self.assertContains(resp, f"{choice.choice_text} : {choice.vote_count}")
+
+    def test_future_question_should_return_404(self):
+        """Unpublished questions should return 404 for unauthorized users"""
+        question = new_question_with_relative_date("", 1)
+        url = reverse("polls:results", args=(question.id,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 404)
