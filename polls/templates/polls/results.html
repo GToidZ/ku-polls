@@ -1,18 +1,27 @@
+{% load static %}
+
 <html lang="en_US">
 
 <head>
     <meta charset="utf-8">
     <title>Results: {{ question.question_text }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 </head>
 
 <body>
-    <h1>{{ question.question_text }}</h1>
-    <ul>
-        {% for choice in question.choice_set.all %}
-        <li>{{ choice.choice_text }} : {{ choice.vote_count }} vote{{ choice.vote_count|pluralize }}</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'polls:details' question.id %}">Vote Again?</a>
+    <div class="container">
+        <h1>{{ question.question_text }}</h1>
+        <ul>
+            {% for choice in question.choice_set.all %}
+            <li>{{ choice.choice_text }} : {{ choice.vote_count }} vote{{ choice.vote_count|pluralize }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'polls:details' question.id %}">Vote Again?</a> | <a href="{% url 'polls:index' %}">Home</a>
+    </div>
 </body>
 
 </html>
