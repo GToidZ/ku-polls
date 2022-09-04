@@ -8,7 +8,7 @@ class Question(models.Model):
     publish_date = models.DateTimeField("date published")
 
     def was_published_recently(self):
-        return self.publish_date >= timezone.now() - timedelta(days=3)
+        return timezone.now() >= self.publish_date >= timezone.now() - timedelta(days=3)
 
     def __str__(self):
         return f"{self.question_text}"

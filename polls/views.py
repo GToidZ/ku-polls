@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
+from django.utils import timezone
 from .models import Question, Choice
 
 
@@ -35,7 +36,9 @@ class IndexView(generic.ListView):
     context_object_name = "latest_questions"
 
     def get_queryset(self):
-        return Question.objects.order_by("-publish_date")[:5]
+        return Question.objects.filter(publish_date__lte=timezone.now()).order_by(
+            "-publish_date"
+        )[:5]
 
 
 class DetailsView(generic.DetailView):
