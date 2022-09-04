@@ -1,0 +1,29 @@
+body {
+    font-family: 'IBM Plex Mono', monospace;
+    background-color: azure;
+}
+
+ul {
+    list-style: none;
+}
+
+div.container {
+    margin: 10rem 5rem;
+}
+
+div.card {
+    padding: 2rem;
+    background-color: cornflowerblue;
+    margin-top: 0.5rem;
+    color: ivory;
+    font-size: large;
+}
+
+div.card a {
+    color: ivory;
+}
+
+div.card span {
+    font-size: medium;
+    color: cornsilk;
+}
