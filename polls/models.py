@@ -10,9 +10,15 @@ class Question(models.Model):
     def was_published_recently(self):
         return self.publish_date >= timezone.now() - timedelta(days=3)
 
+    def __str__(self):
+        return f"Question: {self.question_text}"
+
 
 class Choice(models.Model):
     # Designed with backtracking relationship
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=80)
     vote_count = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Choice: {self.choice_text}; with {self.vote_count} vote(s)"
