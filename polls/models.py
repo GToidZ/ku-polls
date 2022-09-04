@@ -4,6 +4,8 @@ from django.utils import timezone
 
 
 class Question(models.Model):
+    """Model for Question with publishing date"""
+
     question_text = models.CharField(max_length=280)
     publish_date = models.DateTimeField("date published")
 
@@ -15,6 +17,11 @@ class Question(models.Model):
 
 
 class Choice(models.Model):
+    """
+    Model for Choice that makes relationship with Question
+    and has a counter
+    """
+
     # Designed with backtracking relationship
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=80)
