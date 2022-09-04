@@ -11,7 +11,7 @@ class Question(models.Model):
         return self.publish_date >= timezone.now() - timedelta(days=3)
 
     def __str__(self):
-        return f"Question: {self.question_text}"
+        return f"{self.question_text}"
 
 
 class Choice(models.Model):
@@ -21,4 +21,4 @@ class Choice(models.Model):
     vote_count = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"Choice: {self.choice_text}; with {self.vote_count} vote(s)"
+        return f"{self.choice_text}; with {self.vote_count} vote(s)"
