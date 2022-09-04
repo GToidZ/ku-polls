@@ -1,0 +1,22 @@
+<html lang="en_US">
+
+<head>
+    <meta charset="utf-8">
+    <title>KU Polls</title>
+</head>
+
+<body>
+    <h1>KU Polls</h1>
+    Recent Polls
+    {% if latest_questions %}
+    <ul>
+        {% for question in latest_questions %}
+        <li><a href="/polls/{{ question.id }}">{{ question.question_text }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No polls are available at this moment.</p>
+    {% endif %}
+</body>
+
+</html>
