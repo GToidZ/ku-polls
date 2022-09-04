@@ -1,1 +1,20 @@
+# Environment vars file
+*.env
+
+# Virtual environments
+env/
+venv/
+.env
+.venv
+
+# Compiled Python files
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Django files
+*.log
+*.pot
+
+# TODO: Remove when complete setup
+db.sqlite3
