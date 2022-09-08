@@ -54,6 +54,8 @@ The admin page is at `/admin`. The database comes with an insecure admin credent
 
 Iteration 1 [Plan](https://github.com/GToidZ/ku-polls/wiki/Iteration-1-Plan) and [Project Board](https://github.com/users/GToidZ/projects/4/views/2)
 
+Iteration 2 [Plan](https://github.com/GToidZ/ku-polls/wiki/Iteration-2-Plan) and [Project Board](https://github.com/users/GToidZ/projects/4/views/5)
+
 <!-- Using absolute paths for wiki, since it could break clones and forks. -->
 
 [django-tutorial]: https://docs.djangoproject.com/en/4.1/intro/tutorial01/
