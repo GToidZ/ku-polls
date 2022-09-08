@@ -13,9 +13,11 @@ Clone this repository into your desired location,
 git clone https://github.com/GToidZ/ku-polls.git ku-polls
 ```
 
+Next, you will need to configure your server using `settings.ini`. Take a look at `settings.example.ini` on how you can create your own `settings.ini`
+
 The next step is to install the packages required by this repository, for any Python users it is recommended to isolate the packages index by [making a virtual environment][howto-venv].
 
-Once you have your virtual environment set up, source it then,
+Once you have your virtual environment set up, activate it then,
 
 ```bash
 # Run while sourcing the venv.
