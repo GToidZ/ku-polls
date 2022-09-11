@@ -21,6 +21,9 @@
                     <h1>{{ question.question_text }}</h1>
                 </legend>
                 <i>Published since {{ question.publish_date }}</i>
+                {% if question.end_date %}
+                <br><i><b>Ends at {{ question.end_date }}</b></i>
+                {% endif %}
                 <hr class="solid">
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
                 {% for choice in question.choice_set.all %}
@@ -31,7 +34,7 @@
                 <input type="submit" value="Vote">
             </fieldset>
         </form>
-        <a href="{% url 'polls:index' %}">Home</a>
+        <a href="{% url 'polls:index' %}">Home</a> | <a href="{% url 'polls:results' question.id %}">View Results</a>
     </div>
 </body>
 

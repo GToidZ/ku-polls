@@ -21,8 +21,12 @@
             {% for question in latest_questions %}
             <li>
                 <div class="card">
-                    <a href="{% url 'polls:details' question.id %}">{{ question.question_text }}</a><br>
+                    <a href="{% url 'polls:details' question.id %}" class="">{{ question.question_text }}</a>
+                    <a href="{% url 'polls:results' question.id %}" style="font-size: small;">View Results</a><br>
                     <span><i>Published {{ question.publish_date }}</i></span>
+                    {% if question.end_date %}
+                    <br><span><i><b>Ends at {{ question.end_date }}</b></i></span>
+                    {% endif %}
                 </div>
             </li>
             {% endfor %}
