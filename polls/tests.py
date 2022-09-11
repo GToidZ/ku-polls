@@ -1,4 +1,5 @@
-import datetime
+import datetime, zoneinfo
+from unittest.mock import patch
 from django.test import TestCase, Client
 from django.utils import timezone
 from django.urls import reverse
@@ -12,18 +13,25 @@ def new_question(question_text, publish_date):
     )
 
 
-def new_question_with_relative_date(question_text, days=0):
+def new_question_with_relative_date(question_text, days=0, ends=None):
     """
-    Create a Question with question_text and publish_date
+    Create a Question with question_text, publish_date and end_date
     is relative with day count
     """
     at = timezone.now() + datetime.timedelta(days=days)
-    return new_question(question_text, at)
+    question = new_question(question_text, at)
+    if ends:
+        question.end_date = timezone.now() + datetime.timedelta(days=ends)
+    return question
 
 
 def new_choice(question: Question, choice_text):
     """Create a new Choice for a Question instance"""
     return question.choice_set.create(choice_text=choice_text)
+
+
+def get_placeholder_time():
+    return timezone.datetime(2022, 1, 1, 0, 0, 0, 0, tzinfo=datetime.timezone.utc)
 
 
 class TestQuestionModel(TestCase):
@@ -63,6 +71,47 @@ class TestQuestionModel(TestCase):
         self.assertEqual(earliest_choice, question.choice_set.first())
         self.assertEqual(latest_choice, question.choice_set.last())
 
+    def test_is_question_published(self):
+        """
+        is_published() should return True if current date is after publish_date,
+        False if not
+        """
+
+        question = new_question_with_relative_date("")
+        self.assertTrue(question.is_published())
+
+        question = new_question_with_relative_date("", -1)
+        self.assertTrue(question.is_published())
+
+        question = new_question_with_relative_date("", 1)
+        self.assertFalse(question.is_published())
+
+    @patch("django.utils.timezone.now", new=get_placeholder_time)
+    def test_can_vote_on_publish_time(self):
+        """
+        If current time is equal to published date, can_vote() returns True
+        """
+        time = get_placeholder_time()
+        question = new_question("", time)
+        self.assertTrue(question.can_vote())
+
+    @patch("django.utils.timezone.now", new=get_placeholder_time)
+    def test_can_vote_on_end_time(self):
+        """
+        If current time is equal to end date, can_vote() returns True
+        """
+        time = get_placeholder_time()
+        question = new_question("", time - datetime.timedelta(days=1))
+        question.end_date = time
+        self.assertTrue(question.can_vote())
+
+    def test_cannot_vote_ended_polls(self):
+        """
+        can_vote() should return False if the poll has already ended
+        """
+        question = new_question_with_relative_date("", -1, -1)
+        self.assertFalse(question.can_vote())
+
 
 class TestChoiceModel(TestCase):
     def test_choice_assigned_to_correct_question(self):
@@ -77,7 +126,6 @@ class TestChoiceModel(TestCase):
 
     def test_vote_count_updates(self):
         """When a choice is voted, it should be correctly counted"""
-
         question = new_question("", timezone.now())
         new_choice(question, "A")
         new_choice(question, "B")
@@ -160,7 +208,8 @@ class TestResultsView(TestCase):
         choice.save()
         url = reverse("polls:results", args=(question.id,))
         resp = self.client.get(url)
-        self.assertContains(resp, f"{choice.choice_text} : {choice.vote_count}")
+        self.assertContains(resp, f"{choice.choice_text}")
+        self.assertContains(resp, f'<span class="votes">1</span>')
 
     def test_future_question_should_return_404(self):
         """Unpublished questions should return 404 for unauthorized users"""
