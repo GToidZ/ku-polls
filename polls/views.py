@@ -66,5 +66,12 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = "polls/results.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total_votes"] = sum(
+            [c.vote_count for c in context["question"].choice_set.all()]
+        )
+        return context
+
     def get_queryset(self):
         return Question.objects.filter(id__in=get_published())
