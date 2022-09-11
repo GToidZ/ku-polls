@@ -25,7 +25,11 @@
                 <br><i><b>Ends at {{ question.end_date }}</b></i>
                 {% endif %}
                 <hr class="solid">
-                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                {% if messages %}
+                {% for msg in messages %}
+                <p style="color: red"><b>{{ msg }}</b></p>
+                {% endfor %}
+                {% endif %}
                 {% for choice in question.choice_set.all %}
                 <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
                 <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />

@@ -3,6 +3,7 @@ from django.http import Http404
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib import messages
 from .models import Question, Choice
 
 
@@ -23,10 +24,11 @@ def vote(request, question_id):
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
+        messages.error(request, "You didn't choose a choice!")
         return render(
             request,
             "polls/details.html",
-            {"question": question, "error_message": "You didn't choose a choice..."},
+            {"question": question},
         )
     else:
         selected_choice.vote_count += 1
