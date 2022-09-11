@@ -13,9 +13,11 @@ Clone this repository into your desired location,
 git clone https://github.com/GToidZ/ku-polls.git ku-polls
 ```
 
+Next, you will need to configure your server using `settings.ini`. Take a look at `settings.example.ini` on how you can create your own `settings.ini`
+
 The next step is to install the packages required by this repository, for any Python users it is recommended to isolate the packages index by [making a virtual environment][howto-venv].
 
-Once you have your virtual environment set up, source it then,
+Once you have your virtual environment set up, activate it then,
 
 ```bash
 # Run while sourcing the venv.
@@ -53,6 +55,8 @@ The admin page is at `/admin`. The database comes with an insecure admin credent
 ## Iterations
 
 Iteration 1 [Plan](https://github.com/GToidZ/ku-polls/wiki/Iteration-1-Plan) and [Project Board](https://github.com/users/GToidZ/projects/4/views/2)
+
+Iteration 2 [Plan](https://github.com/GToidZ/ku-polls/wiki/Iteration-2-Plan) and [Project Board](https://github.com/users/GToidZ/projects/4/views/5)
 
 <!-- Using absolute paths for wiki, since it could break clones and forks. -->
 

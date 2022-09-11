@@ -15,3 +15,10 @@ __pycache__/
 # Django files
 *.log
 *.pot
+
+# IDE files
+.idea
+.vscode
+
+# Security-related
+settings.ini
