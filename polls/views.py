@@ -1,9 +1,14 @@
-from django.shortcuts import render
-from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.http import Http404
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from .models import Question, Choice
+
+
+def get_published():
+    questions = Question.objects.all()
+    return [q.id for q in questions if q.is_published()]
 
 
 def vote(request, question_id):
@@ -26,7 +31,7 @@ def vote(request, question_id):
     else:
         selected_choice.vote_count += 1
         selected_choice.save()
-        return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+        return redirect("polls:results", pk=question_id)
 
 
 class IndexView(generic.ListView):
@@ -36,9 +41,7 @@ class IndexView(generic.ListView):
     context_object_name = "latest_questions"
 
     def get_queryset(self):
-        return Question.objects.filter(publish_date__lte=timezone.now()).order_by(
-            "-publish_date"
-        )[:5]
+        return Question.objects.filter(id__in=get_published()).order_by("-publish_date")
 
 
 class DetailsView(generic.DetailView):
@@ -47,8 +50,14 @@ class DetailsView(generic.DetailView):
     model = Question
     template_name = "polls/details.html"
 
+    def dispatch(self, request, *args, **kwargs):
+        question_id = kwargs["pk"]
+        if not Question.objects.get(pk=question_id).can_vote():
+            return redirect("polls:results", pk=question_id)
+        return super(DetailsView, self).dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
-        return Question.objects.filter(publish_date__lte=timezone.now())
+        return Question.objects.filter(id__in=get_published())
 
 
 class ResultsView(generic.DetailView):
@@ -58,4 +67,4 @@ class ResultsView(generic.DetailView):
     template_name = "polls/results.html"
 
     def get_queryset(self):
-        return Question.objects.filter(publish_date__lte=timezone.now())
+        return Question.objects.filter(id__in=get_published())
