@@ -22,6 +22,7 @@ def new_question_with_relative_date(question_text, days=0, ends=None):
     question = new_question(question_text, at)
     if ends:
         question.end_date = timezone.now() + datetime.timedelta(days=ends)
+        question.save()
     return question
 
 
@@ -105,11 +106,27 @@ class TestQuestionModel(TestCase):
         question.end_date = time
         self.assertTrue(question.can_vote())
 
+    def test_cannot_vote_unpublished_polls(self):
+        """
+        can_vote() should return True if the poll hasn't been published yet
+        """
+        question = new_question_with_relative_date("", 1)
+        self.assertFalse(question.can_vote())
+
     def test_cannot_vote_ended_polls(self):
         """
         can_vote() should return False if the poll has already ended
         """
         question = new_question_with_relative_date("", -1, -1)
+        self.assertFalse(question.can_vote())
+
+    def test_invisible_polls_are_not_votable(self):
+        """
+        can_vote() should return False if the poll is invisible
+        """
+        question = new_question_with_relative_date("", 0)
+        question.visibilty = False
+        question.save()
         self.assertFalse(question.can_vote())
 
 
@@ -195,6 +212,14 @@ class TestDetailsView(TestCase):
         url = reverse("polls:details", args=(question.id,))
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 404)
+
+    def test_ended_polls_should_redirect(self):
+        """Ended questions should redirect users to results view"""
+        question = new_question_with_relative_date("", -1, -1)
+        url = reverse("polls:details", args=(question.id,))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 302)
+        self.assertIn(("Location", "/polls/1/results/"), resp.items())
 
 
 class TestResultsView(TestCase):

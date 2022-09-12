@@ -54,7 +54,10 @@ class DetailsView(generic.DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         question_id = kwargs["pk"]
-        if not Question.objects.get(pk=question_id).can_vote():
+        question = Question.objects.get(pk=question_id)
+        if not question.is_published():
+            raise Http404("Question is unpublished")
+        if not question.can_vote():
             return redirect("polls:results", pk=question_id)
         return super(DetailsView, self).dispatch(request, *args, **kwargs)
 
