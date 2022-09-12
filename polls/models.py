@@ -20,6 +20,8 @@ class Question(models.Model):
         return timezone.now() >= self.publish_date >= timezone.now() - timedelta(days=3)
 
     def can_vote(self):
+        if not self.is_published():
+            return False
         if not self.end_date:
             return True
         return self.end_date >= timezone.now() >= self.publish_date
