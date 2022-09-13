@@ -4,7 +4,14 @@ from django.utils import timezone
 
 
 class Question(models.Model):
-    """Model for Question with publishing date"""
+    """
+    Model for Question with publishing date
+
+    :param question_text: question's short description
+    :param publish_date: datetime when poll should be published
+    :param end_date: datetime when poll should ended
+    :param visibility: poll is hidden from users or not
+    """
 
     question_text = models.CharField(max_length=280)
     publish_date = models.DateTimeField("date published")
@@ -34,6 +41,10 @@ class Choice(models.Model):
     """
     Model for Choice that makes relationship with Question
     and has a counter
+
+    :param question: what Question does this relevant to
+    :param choice_text: choice's short description
+    :param vote_count: amount of votes
     """
 
     # Designed with backtracking relationship

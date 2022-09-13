@@ -8,12 +8,17 @@ from .models import Question, Choice
 
 
 def get_published():
+    """Returns all questions id that are published"""
     questions = Question.objects.all()
     return [q.id for q in questions if q.is_published()]
 
 
 def vote(request, question_id):
-    """View for casting a vote.
+    """
+    View for casting a vote.
+
+    :param question_id: primary key id of question
+
     What I learned here: view acts like a path on website, you could also
     use HTTP methods here without showing anything.
     """
