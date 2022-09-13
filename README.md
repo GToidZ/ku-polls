@@ -58,6 +58,8 @@ Iteration 1 [Plan](https://github.com/GToidZ/ku-polls/wiki/Iteration-1-Plan) and
 
 Iteration 2 [Plan](https://github.com/GToidZ/ku-polls/wiki/Iteration-2-Plan) and [Project Board](https://github.com/users/GToidZ/projects/4/views/5)
 
+Iteration 3 [Plan](https://github.com/GToidZ/ku-polls/wiki/Iteration-3-Plan) and [Project Board](https://github.com/users/GToidZ/projects/4/views/6)
+
 <!-- Using absolute paths for wiki, since it could break clones and forks. -->
 
 [django-tutorial]: https://docs.djangoproject.com/en/4.1/intro/tutorial01/
