@@ -39,10 +39,15 @@ The main page is at `/polls`.
 
 The admin page is at `/admin`. The database comes with an insecure admin credentials, make sure to login and setup better admin credentials before deploying!
 
-<u><b>Admin Credentials</b></u>
+<b>Admin Credentials</b>
 |Username|Password|
 |:-:|:-:|
 |admin|1234|
+
+<b>User Credentials</b>
+|Username|Password|
+|:-:|:-:|
+|hackerman|1337c0d3r|
 
 # Project Documentation
 
