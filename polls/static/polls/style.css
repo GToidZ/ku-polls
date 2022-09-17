@@ -11,6 +11,17 @@ div.container {
     margin: 10rem 5rem;
 }
 
+div.top {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+div.top>span{
+    text-align: right;
+}
+
 div.card {
     padding: 2rem;
     background-color: cornflowerblue;

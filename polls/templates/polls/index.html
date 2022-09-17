@@ -14,13 +14,22 @@
 
 <body>
     <div class="container">
-        <h1>KU Polls</h1>
+        <div class="top">
+            <h1>KU Polls</h1>
+            <span>
+                {% if user.is_authenticated %}
+                Hello, {{ user.username }}. Click <a href="/accounts/logout/">here</a> to sign out.
+                {% else %}
+                Click <a href="/accounts/login/">here</a> to sign in.
+                {% endif %}
+            </span>
+        </div>
         Recent Polls
         {% if latest_questions %}
         <ul>
             {% for question in latest_questions %}
             <li>
-                <div class="card">
+                <div class=" card">
                     <a href="{% url 'polls:details' question.id %}" class="">{{ question.question_text }}</a>
                     <a href="{% url 'polls:results' question.id %}" style="font-size: small;">View Results</a><br>
                     <span><i>Published {{ question.publish_date }}</i></span>
