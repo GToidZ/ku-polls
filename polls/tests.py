@@ -3,7 +3,11 @@ from unittest.mock import patch
 from django.test import TestCase, Client
 from django.utils import timezone
 from django.urls import reverse
-from .models import Question, Choice
+from django.contrib.auth.models import User
+from .models import Question, Choice, VoteData
+
+# TODO: Make tests for authorization and one vote per user
+# TODO: Modularize tests into categories
 
 
 def new_question(question_text, publish_date):
@@ -29,6 +33,16 @@ def new_question_with_relative_date(question_text, days=0, ends=None):
 def new_choice(question: Question, choice_text):
     """Create a new Choice for a Question instance"""
     return question.choice_set.create(choice_text=choice_text)
+
+
+def new_test_user(username):
+    """Create a new Django User instance"""
+    return User.objects.create(username=username)
+
+
+def vote(choice: Choice, user: User):
+    """Create a new VoteData"""
+    return VoteData.objects.create(choice=choice, user=user)
 
 
 def get_placeholder_time():
@@ -131,6 +145,9 @@ class TestQuestionModel(TestCase):
 
 
 class TestChoiceModel(TestCase):
+    def setUp(self):
+        self.user = new_test_user("test")
+
     def test_choice_assigned_to_correct_question(self):
         """When a choice is created, it should be only in one Question"""
         correct_question = new_question("", timezone.now())
@@ -157,20 +174,20 @@ class TestChoiceModel(TestCase):
         check_votes(0, 0, 0)
 
         choice = question.choice_set.get(pk=1)
-        choice.vote_count += 1
-        choice.save()
+        vote(choice, self.user)
 
         check_votes(1, 0, 0)
 
         choice = question.choice_set.get(pk=2)
-        choice.vote_count += 99
-        choice.save()
+        vote(choice, self.user)
 
-        check_votes(1, 99, 0)
+        check_votes(1, 1, 0)
 
 
 class TestIndexView(TestCase):
-    client = Client()
+    def setUp(self):
+        client = Client()
+        self.user = new_test_user("test")
 
     def test_no_questions(self):
         """No polls should be available the first time the server is set up"""
@@ -195,7 +212,9 @@ class TestIndexView(TestCase):
 
 
 class TestDetailsView(TestCase):
-    client = Client()
+    def setUp(self):
+        client = Client()
+        self.user = new_test_user("test")
 
     def test_question_with_choices(self):
         """Published questions should have choices displayed"""
@@ -223,14 +242,16 @@ class TestDetailsView(TestCase):
 
 
 class TestResultsView(TestCase):
-    client = Client()
+    def setUp(self):
+        client = Client()
+        self.user = new_test_user("test")
 
     def test_correct_vote_count_display(self):
         question = new_question_with_relative_date("Test Question")
         new_choice(question, "An ambiguous choice")
         choice = question.choice_set.get(pk=1)
-        choice.vote_count += 1
-        choice.save()
+        data = vote(choice, self.user)
+        data.save()
         url = reverse("polls:results", args=(question.id,))
         resp = self.client.get(url)
         self.assertContains(resp, f"{choice.choice_text}")
