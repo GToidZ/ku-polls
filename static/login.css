@@ -1,0 +1,23 @@
+body {
+    font-family: 'IBM Plex Mono', monospace;
+    background-color: azure;
+}
+
+div.container {
+    margin: 10rem 5rem;
+}
+
+form {
+    display: flex;
+    margin-left: 2rem;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+form>table {
+    padding-bottom: 2rem;
+}
+
+form>button {
+    font-family: 'IBM Plex Mono', monospace;
+}

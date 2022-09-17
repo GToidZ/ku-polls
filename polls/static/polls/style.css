@@ -27,3 +27,7 @@ div.card span {
     font-size: medium;
     color: cornsilk;
 }
+
+button {
+    font-family: 'IBM Plex Mono', monospace;
+}
