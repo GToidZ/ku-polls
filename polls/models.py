@@ -1,6 +1,7 @@
 from datetime import timedelta
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Question(models.Model):
@@ -44,13 +45,35 @@ class Choice(models.Model):
 
     :param question: what Question does this relevant to
     :param choice_text: choice's short description
-    :param vote_count: amount of votes
     """
 
     # Designed with backtracking relationship
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=80)
-    vote_count = models.IntegerField(default=0)
+
+    @property
+    def vote_count(self):
+        return len(VoteData.objects.filter(choice=self))
 
     def __str__(self):
         return f"{self.choice_text}; with {self.vote_count} vote(s)"
+
+
+class VoteData(models.Model):
+    """
+    Model for a voting data where each vote contains associating user
+    and choice that they have voted
+
+    :param user: who voted for the choice
+    :param choice: the choice that has been selected
+    """
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+
+    @property
+    def question(self):
+        return self.choice.question
+
+    def __str__(self):
+        return f"{self.user.username} voting for {self.choice.choice_text}"
