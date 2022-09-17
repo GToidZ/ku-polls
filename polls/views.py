@@ -68,13 +68,27 @@ class DetailsView(generic.DetailView):
     template_name = "polls/details.html"
 
     def dispatch(self, request, *args, **kwargs):
-        question_id = kwargs["pk"]
-        question = Question.objects.get(pk=question_id)
+        self.question_id = kwargs["pk"]
+        question = Question.objects.get(pk=self.question_id)
         if not question.is_published():
             raise Http404("Question is unpublished")
         if not question.can_vote():
-            return redirect("polls:results", pk=question_id)
+            return redirect("polls:results", pk=self.question_id)
         return super(DetailsView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        question = Question.objects.get(pk=self.question_id)
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            try:
+                selected_choice = VoteData.objects.get(
+                    user=user, choice__in=question.choice_set.all()
+                ).choice.choice_text
+                context["selected_choice"] = selected_choice
+            except VoteData.DoesNotExist:
+                pass  # Do nothing here, selected_choice is not set
+        return context
 
     def get_queryset(self):
         return Question.objects.filter(id__in=get_published())

@@ -18,7 +18,12 @@ div.top {
     justify-content: space-between;
 }
 
+div.top>h1 {
+    flex-shrink: 1;
+}
+
 div.top>span{
+    flex-shrink: 0;
     text-align: right;
 }
 

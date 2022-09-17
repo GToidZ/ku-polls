@@ -16,7 +16,16 @@
 
 <body>
     <div class="container">
-        <h1>{{ question.question_text }}</h1>
+        <div class="top">
+            <h1>{{ question.question_text }}</h1>
+            <span>
+                {% if user.is_authenticated %}
+                Hello, {{ user.username }}. Click <a href="/accounts/logout/">here</a> to sign out.
+                {% else %}
+                Click <a href="/accounts/login/">here</a> to sign in.
+                {% endif %}
+            </span>
+        </div>
         <ul>
             {% for choice in question.choice_set.all %}
             <li>{{ choice.choice_text }}
