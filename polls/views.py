@@ -3,8 +3,10 @@ from django.http import Http404
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.core import exceptions
 from django.contrib import messages
-from .models import Question, Choice
+from django.contrib.auth.decorators import login_required
+from .models import Question, Choice, VoteData
 
 
 def get_published():
@@ -13,6 +15,7 @@ def get_published():
     return [q.id for q in questions if q.is_published()]
 
 
+@login_required
 def vote(request, question_id):
     """
     View for casting a vote.
@@ -36,8 +39,15 @@ def vote(request, question_id):
             {"question": question},
         )
     else:
-        selected_choice.vote_count += 1
-        selected_choice.save()
+        user = request.user
+        try:
+            data = VoteData.objects.get(user=user, choice__in=question.choice_set.all())
+        except VoteData.DoesNotExist:
+            data = VoteData.objects.create(choice=selected_choice, user=user)
+            data.save()
+        else:
+            data.choice = selected_choice
+            data.save()
         return redirect("polls:results", pk=question_id)
 
 

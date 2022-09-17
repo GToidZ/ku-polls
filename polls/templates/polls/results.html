@@ -35,8 +35,7 @@
             </li>
             {% endfor %}
         </ul>
-        {% if question.can_vote %}<a href="{% url 'polls:details' question.id %}">Vote Again?</a> | {% endif %}<a
-            href="{% url 'polls:index' %}">Home</a>
+        <a href="{% url 'polls:index' %}">Home</a>
     </div>
 </body>
 

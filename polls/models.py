@@ -53,7 +53,7 @@ class Choice(models.Model):
 
     @property
     def vote_count(self):
-        return len(VoteData.objects.filter(choice=self))
+        return VoteData.objects.filter(choice=self).count()
 
     def __str__(self):
         return f"{self.choice_text}; with {self.vote_count} vote(s)"
@@ -70,10 +70,6 @@ class VoteData(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-
-    @property
-    def question(self):
-        return self.choice.question
 
     def __str__(self):
         return f"{self.user.username} voting for {self.choice.choice_text}"
