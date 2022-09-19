@@ -27,7 +27,8 @@
                 {% if user.is_authenticated %}
                 <br>Voting as {{ user.username }}
                 {% else %}
-                <br><b>You must login first before voting!</b>
+                <br><b>You must <a href="/accounts/login/?next={% url 'polls:details' question.id %}">sign in</a> first
+                    before voting!</b>
                 {% endif %}
                 <hr class="solid">
                 {% if messages %}
