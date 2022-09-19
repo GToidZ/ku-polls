@@ -24,6 +24,12 @@
                 {% if question.end_date %}
                 <br><i><b>Ends at {{ question.end_date }}</b></i>
                 {% endif %}
+                {% if user.is_authenticated %}
+                <br>Voting as {{ user.username }}
+                {% else %}
+                <br><b>You must <a href="/accounts/login/?next={% url 'polls:details' question.id %}">sign in</a> first
+                    before voting!</b>
+                {% endif %}
                 <hr class="solid">
                 {% if messages %}
                 {% for msg in messages %}
@@ -31,11 +37,16 @@
                 {% endfor %}
                 {% endif %}
                 {% for choice in question.choice_set.all %}
+                {% if choice.choice_text == selected_choice %}
+                <input type="radio" checked="true" name="choice" id="choice{{ forloop.counter }}"
+                    value="{{ choice.id }}">
+                {% else %}
                 <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                {% endif %}
                 <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
                 {% endfor %}
                 <hr class="solid">
-                <input type="submit" value="Vote">
+                <button type="submit">Vote</button>
             </fieldset>
         </form>
         <a href="{% url 'polls:index' %}">Home</a> | <a href="{% url 'polls:results' question.id %}">View Results</a>

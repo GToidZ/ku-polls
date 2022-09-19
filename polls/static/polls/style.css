@@ -7,8 +7,28 @@ ul {
     list-style: none;
 }
 
+a {
+    color: black;
+}
+
 div.container {
     margin: 10rem 5rem;
+}
+
+div.top {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+div.top>h1 {
+    flex-shrink: 1;
+}
+
+div.top>span{
+    flex-shrink: 0;
+    text-align: right;
 }
 
 div.card {
@@ -17,6 +37,13 @@ div.card {
     margin-top: 0.5rem;
     color: ivory;
     font-size: large;
+    border-radius: 0.5rem;
+    box-shadow: none;
+    transition: 0.3s;
+}
+
+div.card:hover {
+    box-shadow: 0 0.2rem 5px lightblue;
 }
 
 div.card a {
@@ -26,4 +53,8 @@ div.card a {
 div.card span {
     font-size: medium;
     color: cornsilk;
+}
+
+button {
+    font-family: 'IBM Plex Mono', monospace;
 }
