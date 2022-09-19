@@ -23,8 +23,12 @@ class TestChoiceModel(TestCase):
 
         choice = new_choice(correct_question, "Test")
 
-        self.assertTrue(choice in correct_question.choice_set.all())
-        self.assertFalse(choice in wrong_question.choice_set.all())
+        self.assertTrue(
+            choice in correct_question.choice_set.all()
+        )  # Checks if the choice is in correct Question
+        self.assertFalse(
+            choice in wrong_question.choice_set.all()
+        )  # Checks if the choice is not in wrong Question
 
     def test_vote_count_updates(self):
         """When a choice is voted, it should be correctly counted"""
@@ -37,7 +41,9 @@ class TestChoiceModel(TestCase):
             if len(counts) != len(question.choice_set.all()):
                 raise ValueError("Counts are not the same length as choices")
             for choice, count in zip(question.choice_set.all(), counts):
-                self.assertEqual(choice.vote_count, count)
+                self.assertEqual(
+                    choice.vote_count, count
+                )  # Checks for correct vote count of each choice
 
         check_votes(0, 0, 0)
 

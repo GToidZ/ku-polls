@@ -18,7 +18,10 @@ def get_published():
 @login_required
 def vote(request, question_id):
     """
-    View for casting a vote.
+    View for casting a vote. Requires user to be authorized before
+    casting their vote. (Accessing this view)
+
+    Namespace: polls:vote
 
     :param question_id: primary key id of question
 
@@ -52,7 +55,11 @@ def vote(request, question_id):
 
 
 class IndexView(generic.ListView):
-    """View for list of recent questions."""
+    """
+    View for list of recent questions.
+
+    Namespace: polls:index
+    """
 
     template_name = "polls/index.html"
     context_object_name = "latest_questions"
@@ -62,7 +69,11 @@ class IndexView(generic.ListView):
 
 
 class DetailsView(generic.DetailView):
-    """View for viewing question and its choices."""
+    """
+    View for viewing question and its choices.
+
+    Namespace: polls:details
+    """
 
     model = Question
     template_name = "polls/details.html"
@@ -95,7 +106,11 @@ class DetailsView(generic.DetailView):
 
 
 class ResultsView(generic.DetailView):
-    """View for seeing results of a poll."""
+    """
+    View for seeing results of a poll.
+
+    Namespace: polls:results
+    """
 
     model = Question
     template_name = "polls/results.html"
