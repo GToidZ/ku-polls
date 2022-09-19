@@ -17,3 +17,8 @@ def divide(value, arg):
         return float(value) / float(arg)
     except (ValueError, ZeroDivisionError):
         return None
+
+
+@register.filter
+def integer(value):
+    return str(int(value))

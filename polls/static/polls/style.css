@@ -7,6 +7,10 @@ ul {
     list-style: none;
 }
 
+a {
+    color: black;
+}
+
 div.container {
     margin: 10rem 5rem;
 }
@@ -33,6 +37,13 @@ div.card {
     margin-top: 0.5rem;
     color: ivory;
     font-size: large;
+    border-radius: 0.5rem;
+    box-shadow: none;
+    transition: 0.3s;
+}
+
+div.card:hover {
+    box-shadow: 0 0.2rem 5px lightblue;
 }
 
 div.card a {
