@@ -15,6 +15,8 @@ git clone https://github.com/GToidZ/ku-polls.git ku-polls
 
 Next, you will need to configure your server using `settings.ini`. Take a look at `settings.example.ini` on how you can create your own `settings.ini`
 
+> Alternatively, you can provide environment variables with the same name as options in the `settings.example.ini` instead.
+
 The next step is to install the packages required by this repository, for any Python users it is recommended to isolate the packages index by [making a virtual environment][howto-venv].
 
 Once you have your virtual environment set up, activate it then,
