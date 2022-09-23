@@ -1,4 +1,5 @@
-import datetime, zoneinfo
+"""Utilities for testing"""
+import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
 from polls.models import Question, Choice, VoteData
@@ -16,8 +17,8 @@ def new_question_with_relative_date(question_text, days=0, ends=None):
     Create a Question with question_text, publish_date and end_date
     is relative with day count
     """
-    at = timezone.now() + datetime.timedelta(days=days)
-    question = new_question(question_text, at)
+    when = timezone.now() + datetime.timedelta(days=days)
+    question = new_question(question_text, when)
     if ends:
         question.end_date = timezone.now() + datetime.timedelta(days=ends)
         question.save()

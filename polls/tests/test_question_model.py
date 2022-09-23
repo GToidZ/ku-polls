@@ -1,30 +1,45 @@
-import datetime, zoneinfo
+"""Tests for Question model"""
+import datetime
 from unittest.mock import patch
 from django.test import TestCase
 from django.utils import timezone
-from polls.models import Question
-from polls.tests.utils import new_question, new_question_with_relative_date, new_choice
+from polls.tests.utils import (
+    new_question,
+    new_question_with_relative_date,
+    new_choice,
+)
 
 
 def get_placeholder_time():
-    return timezone.datetime(2022, 1, 1, 0, 0, 0, 0, tzinfo=datetime.timezone.utc)
+    """Returns a made-up datetime object"""
+    return timezone.datetime(
+        2022, 1, 1, 0, 0, 0, 0, tzinfo=datetime.timezone.utc
+    )
 
 
 class TestQuestionModel(TestCase):
     def test_was_published_recently_with_future_instance(self):
-        """was_published_recently() returns False if a question is not published"""
+        """
+        was_published_recently() returns False if a question is not published
+        """
 
         question = new_question_with_relative_date("", 1)
         self.assertFalse(question.was_published_recently())
 
     def test_was_published_recently_with_old_instance(self):
-        """was_published_recently() returns False if a question is older than 3 days"""
+        """
+        was_published_recently() returns False if a question
+        is older than 3 days
+        """
 
         question = new_question_with_relative_date("", -4)
         self.assertFalse(question.was_published_recently())
 
     def test_choice_list_is_correctly_set(self):
-        """When creating new Choice(s) in Question they should be added to choice_set"""
+        """
+        When creating new Choice(s) in Question
+        they should be added to choice_set
+        """
 
         question = new_question("", timezone.now())
         choice_set_size = question.choice_set.all
@@ -40,7 +55,10 @@ class TestQuestionModel(TestCase):
         self.assertEqual(latest_choice, question.choice_set.last())
 
     def test_is_question_published(self):
-        """is_published() returns True if current time is after publish_date, otherwise False"""
+        """
+        is_published() returns True if current time
+        is after publish_date, otherwise False
+        """
 
         question = new_question_with_relative_date("")
         self.assertTrue(question.is_published())
@@ -54,7 +72,10 @@ class TestQuestionModel(TestCase):
     # Patch the time function to always return placeholder time
     @patch("django.utils.timezone.now", new=get_placeholder_time)
     def test_can_vote_on_publish_time(self):
-        """If current time is equal to published date, can_vote() returns True"""
+        """
+        If current time is equal to published date,
+        can_vote() returns True
+        """
         time = get_placeholder_time()
         question = new_question("", time)
         self.assertTrue(question.can_vote())

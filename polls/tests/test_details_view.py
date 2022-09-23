@@ -1,21 +1,16 @@
-import datetime, zoneinfo
-from unittest.mock import patch
+"""Tests for Details view"""
 from django.test import TestCase, Client
-from django.utils import timezone
 from django.urls import reverse
-from polls.models import Question
 from polls.tests.utils import (
-    new_question,
     new_question_with_relative_date,
     new_choice,
     new_test_user,
-    vote,
 )
 
 
 class TestDetailsView(TestCase):
     def setUp(self):
-        client = Client()
+        self.client = Client()
         self.user = new_test_user("test")
 
     def test_question_with_choices(self):
@@ -29,7 +24,8 @@ class TestDetailsView(TestCase):
         self.assertContains(
             resp, question.question_text
         )  # Checks if question is displayed
-        self.assertContains(resp, choice.choice_text)  # Checks if choice is displayed
+        self.assertContains(resp, choice.choice_text)
+        # Checks if choice is displayed
 
     def test_future_question_should_return_404(self):
         """Unpublished questions return 404 for unauthorized users"""

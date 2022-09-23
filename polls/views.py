@@ -1,9 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import Http404
-from django.urls import reverse
 from django.views import generic
-from django.utils import timezone
-from django.core import exceptions
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Question, Choice, VoteData
@@ -44,7 +41,9 @@ def vote(request, question_id):
     else:
         user = request.user
         try:
-            data = VoteData.objects.get(user=user, choice__in=question.choice_set.all())
+            data = VoteData.objects.get(
+                user=user, choice__in=question.choice_set.all()
+            )
         except VoteData.DoesNotExist:
             data = VoteData.objects.create(choice=selected_choice, user=user)
             data.save()
@@ -65,7 +64,9 @@ class IndexView(generic.ListView):
     context_object_name = "latest_questions"
 
     def get_queryset(self):
-        return Question.objects.filter(id__in=get_published()).order_by("-publish_date")
+        return Question.objects.filter(id__in=get_published()).order_by(
+            "-publish_date"
+        )
 
 
 class DetailsView(generic.DetailView):
