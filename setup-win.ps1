@@ -200,7 +200,7 @@ INFO: To setup more polls, do so in Admin page of the application.
     py .\manage.py createsuperuser
 
     Write-Host @"
-Congratualations! Application successfully installed!
+Congratulations! Application successfully installed!
 To start the application enter:
 .\.venv\Scripts\activate; py ./manage.py runserver 8000
 "@

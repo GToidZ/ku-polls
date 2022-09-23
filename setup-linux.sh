@@ -185,7 +185,7 @@ if [ $TEST_STATUS -ge 1 ]; then
     $PYTHON ./manage.py createsuperuser
 
     # Finishing touches
-    echo "Congratualations! Application successfully installed!"
+    echo "Congratulations! Application successfully installed!"
     echo "To start the application enter:"
     echo ". ./.venv/bin/activate && $PYTHON ./manage.py runserver 8000"
 fi
