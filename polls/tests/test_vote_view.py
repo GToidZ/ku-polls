@@ -1,15 +1,11 @@
-import datetime, zoneinfo
-from unittest.mock import patch
+"""Tests for vote() view"""
 from django.test import TestCase, Client
-from django.utils import timezone
 from django.urls import reverse
 from polls.models import VoteData
 from polls.tests.utils import (
-    new_question,
     new_question_with_relative_date,
     new_choice,
     new_test_user,
-    vote,
 )
 
 
@@ -23,7 +19,7 @@ class TestVoteView(TestCase):
     """
 
     def setUp(self):
-        client = Client()
+        self.client = Client()
         self.user = new_test_user("test")
         self.user.set_password("1234")
         self.user.save()
@@ -49,7 +45,9 @@ class TestVoteView(TestCase):
         Users can change their vote,
         the VoteData object changes but should not be recreated in database
         """
-        logged_in = self.client.login(username=self.user.username, password="1234")
+        logged_in = self.client.login(
+            username=self.user.username, password="1234"
+        )
         self.assertTrue(logged_in)  # Checks for authorization
 
         question = new_question_with_relative_date("")
@@ -58,10 +56,15 @@ class TestVoteView(TestCase):
         question.save()
 
         url = reverse("polls:vote", args=(question.id,))
-        fetch_vote = lambda: VoteData.objects.filter(
-            user=self.user, choice__in=question.choice_set.all()
-        )  # For fetching VoteData associated with user
-        post_with = lambda i: {"choice": i}  # For creating POST data
+
+        def fetch_vote():
+            # For fetching VoteData associated with user
+            return VoteData.objects.filter(
+                user=self.user, choice__in=question.choice_set.all()
+            )
+
+        def post_with(i):
+            return {"choice": i}  # For creating POST data
 
         self.client.post(url, post_with(choice1.id))
         self.assertEqual(fetch_vote().count(), 1)

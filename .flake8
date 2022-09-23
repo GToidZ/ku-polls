@@ -1,0 +1,4 @@
+[flake8]
+exclude=.git,__pycache__,__init__.py,polls/migrations,.venv/
+per-file-ignores=
+    mysite/settings.py: E501

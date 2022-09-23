@@ -1,11 +1,8 @@
-import datetime, zoneinfo
-from unittest.mock import patch
+"""Tests for Choice model"""
 from django.test import TestCase
 from django.utils import timezone
-from polls.models import Question
 from polls.tests.utils import (
     new_question,
-    new_question_with_relative_date,
     new_choice,
     new_test_user,
     vote,

@@ -1,11 +1,7 @@
-import datetime, zoneinfo
-from unittest.mock import patch
+"""Tests for Results view"""
 from django.test import TestCase, Client
-from django.utils import timezone
 from django.urls import reverse
-from polls.models import Question
 from polls.tests.utils import (
-    new_question,
     new_question_with_relative_date,
     new_choice,
     new_test_user,
@@ -15,7 +11,7 @@ from polls.tests.utils import (
 
 class TestResultsView(TestCase):
     def setUp(self):
-        client = Client()
+        self.client = Client()
         self.user = new_test_user("test")
 
     def test_correct_vote_count_display(self):
@@ -33,7 +29,7 @@ class TestResultsView(TestCase):
             resp, f"{choice.choice_text}"
         )  # Checks if the choice is there
         self.assertContains(
-            resp, f'<span class="votes">1</span>'
+            resp, '<span class="votes">1</span>'
         )  # Checks if the vote is correctly counted
 
     def test_future_question_should_return_404(self):
