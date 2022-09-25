@@ -9,10 +9,11 @@ The application is a part of the [Individual Software Process](https://cpske.git
 ## Required on any OS
 * Python 3.9 or greater
 * Python with ensurepip available
-## For Linux/Mac
+## For Linux / Mac (x64)
 * sh
 * cURL
 ## For Windows
+* System running on 64-bit
 * Powershell 5 or greater
 
 *Note: The application might not work on Gentoo, Alpine. For Linux users, it is recommended to install `lscpu` before setup.*
