@@ -1,7 +1,23 @@
 <#
+.Synopsis
+    This is a script for setting up your KU Polls server application.
 .Description
-This is a script for setting up your KU Polls server application.
+    This is a script for setting up your KU Polls server application.
+    When installing, you can create a poll and an admin user.
+.Parameter PythonExecutable
+    If you have multiple Python installations, you can specify a Python installation
+    for installation with this option.
+    "py" is the default value.
+.Example
+    setup-win
+.Example
+    setup-win -PythonExecutable "python"
 #>
+
+param (
+    [Parameter(HelpMessage="The Python executable you are using")]
+    $PythonExecutable = "py"
+)
 
 if (Test-Path -Path .\polls\fixtures) {
     Remove-Item .\polls\fixtures -Recurse
@@ -15,7 +31,7 @@ Make sure it is installed then run setup again...
     exit 1
 }
 
-py -c "import sys; assert sys.version_info >= (3, 9)" 2>&1>$null
+Invoke-Expression "$PythonExecutable -c 'import sys; assert sys.version_info >= (3, 9)'" 2>&1>$null
 if ($LASTEXITCODE -ne 0) {
     Write-Host @'
 Python executed was outdated!
@@ -34,7 +50,7 @@ Invoke-WebRequest -Uri "https://github.com/stedolan/jq/releases/download/jq-1.5/
 
 # Make a Python virtualenv (venv)
 Write-Host "Preparing venv..."
-py -m venv .venv
+Invoke-Expression "$PythonExecutable -m venv .venv"
 .\.venv\Scripts\activate.ps1
 
 # pip install
@@ -43,12 +59,12 @@ pip install -r requirements.txt 2>&1>$null
 
 # Migrate database
 Write-Host "Applying migrations to database..."
-py .\manage.py migrate 2>&1>$null
+Invoke-Expression "$PythonExecutable .\manage.py migrate" 2>&1>$null
 
 # Test the polls app
 Write-Host "Testing app before setting up..."
 $TEST_STATUS = 0
-py .\manage.py test polls > tests.log 2>&1
+Invoke-Expression "$PythonExecutable .\manage.py test polls" > tests.log 2>&1
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Testing failed! This might be a developer's fault!"
     Write-Host "You should create a new issue on https://github.com/GToidZ/ku-polls/issues and attach the 'tests.log' file"
@@ -192,17 +208,17 @@ INFO: To setup more polls, do so in Admin page of the application.
         Start-Sleep -Seconds 1.5
 
         Write-Host "Applying data fixtures..."
-        py .\manage.py loaddata data 2>&1>$null
+        Invoke-Expression "$PythonExecutable .\manage.py loaddata data" 2>&1>$null
     }
 
     Write-Host ""
     Write-Host "INFO: You are required to create an admin account for Django dashboard"
-    py .\manage.py createsuperuser
+    Invoke-Expression "$PythonExecutable .\manage.py createsuperuser"
 
     Write-Host @"
 Congratulations! Application successfully installed!
 To start the application enter:
-.\.venv\Scripts\activate; py ./manage.py runserver 8000
+.\.venv\Scripts\activate; $PythonExecutable ./manage.py runserver 8000
 "@
 }
 
