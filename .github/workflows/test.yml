@@ -4,13 +4,15 @@ on:
   push:
     branches:
       - "**"
+    paths-ignore:
+      - "README.md"
   pull_request:
     types:
       - "opened"
       - "reopened"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   test:
@@ -38,3 +40,14 @@ jobs:
           coverage run ./manage.py test polls
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
+      - name: Update README badges
+        env:
+          GHREF: "${{ github.ref_name }}"
+        run: |
+          UPDATE=$(cat README.md | perl -0777 -pe 's#(<!-- BEGIN BADGES -->)(?:.|\n)*?(<!-- END BADGES -->)#${1}\n![tests status](https://img.shields.io/github/workflow/status/GToidZ/ku-polls/Test%20KU%20Polls?label=tests&logo=github)\n[![codecov](https://codecov.io/gh/GToidZ/ku-polls/branch/${{ env.GHREF }}/graph/badge.svg?token=0SCEVDMAU0)](https://codecov.io/gh/GToidZ/ku-polls)\n${2}#g')
+          echo "${UPDATE}" > README.md
+      - uses: EndBug/add-and-commit@v9
+        with:
+          add: "README.md"
+          default_author: github_actions
+          message: "readme.md: Update badges from workflow"

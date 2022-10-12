@@ -1,5 +1,8 @@
 # Online Polls for KU
 
+<!-- BEGIN BADGES -->
+<!-- END BADGES -->
+
 A web application for conducting online polls and surveys written in Python using Django web framework.<br>
 The application is based off the [Django Tutorial][django-tutorial] but with tweaks.
 
