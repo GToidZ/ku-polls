@@ -2,7 +2,7 @@
 
 <!-- BEGIN BADGES -->
 ![tests status](https://img.shields.io/github/workflow/status/GToidZ/ku-polls/Test%20KU%20Polls?label=Unit%20Tests&logo=github)
-[![codecov](https://codecov.io/gh/GToidZ/ku-polls/branch/feat/ci/graph/badge.svg?token=0SCEVDMAU0)](https://codecov.io/gh/GToidZ/ku-polls)
+[![codecov](https://codecov.io/gh/GToidZ/ku-polls/branch/master/graph/badge.svg?token=0SCEVDMAU0)](https://codecov.io/gh/GToidZ/ku-polls)
 <!-- END BADGES -->
 
 A web application for conducting online polls and surveys written in Python using Django web framework.<br>
