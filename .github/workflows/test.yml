@@ -15,6 +15,8 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: testing_key
     steps:
       - name: Checkout
         uses: actions/checkout@v3
