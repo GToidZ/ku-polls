@@ -53,3 +53,10 @@ class TestChoiceModel(TestCase):
         vote(choice, self.user)
 
         check_votes(1, 1, 0)
+
+    def test_choice_model_str(self):
+        """Test for __str__ in Choice"""
+        text = "Test Choice"
+        question = new_question("", timezone.now())
+        choice = new_choice(question, text)
+        self.assertEqual(f"{text}; with 0 vote(s)", str(choice))
