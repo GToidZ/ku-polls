@@ -38,8 +38,7 @@
                 {% endif %}
                 {% for choice in question.choice_set.all %}
                 {% if choice.choice_text == selected_choice %}
-                <input type="radio" checked="true" name="choice" id="choice{{ forloop.counter }}"
-                    value="{{ choice.id }}">
+                <input type="radio" checked="true" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
                 {% else %}
                 <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
                 {% endif %}

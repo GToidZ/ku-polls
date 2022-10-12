@@ -16,7 +16,9 @@ class Question(models.Model):
 
     question_text = models.CharField(max_length=280)
     publish_date = models.DateTimeField("date published")
-    end_date = models.DateTimeField("date closed", default=None, null=True, blank=True)
+    end_date = models.DateTimeField(
+        "date closed", default=None, null=True, blank=True
+    )
     visibilty = models.BooleanField("poll visibility", default=True)
 
     def is_published(self):
@@ -25,7 +27,11 @@ class Question(models.Model):
         return timezone.now() >= self.publish_date
 
     def was_published_recently(self):
-        return timezone.now() >= self.publish_date >= timezone.now() - timedelta(days=3)
+        return (
+            timezone.now()
+            >= self.publish_date
+            >= timezone.now() - timedelta(days=3)
+        )
 
     def can_vote(self):
         if not self.is_published():

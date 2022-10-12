@@ -3,8 +3,8 @@
     "model": "polls.question",
     "pk": 1,
     "fields": {
-      "question_text": "How do you cook your eggs?",
-      "publish_date": "2022-09-23T18:36:33Z",
+      "question_text": "Test",
+      "publish_date": "2022-10-12T01:40:58Z",
       "end_date": null,
       "visibilty": true
     }
@@ -14,7 +14,7 @@
     "pk": 1,
     "fields": {
       "question": 1,
-      "choice_text": "Sunny-side-up"
+      "choice_text": "1"
     }
   },
   {
@@ -22,7 +22,7 @@
     "pk": 2,
     "fields": {
       "question": 1,
-      "choice_text": "Scrambled"
+      "choice_text": "2"
     }
   },
   {
@@ -30,15 +30,7 @@
     "pk": 3,
     "fields": {
       "question": 1,
-      "choice_text": "Poached"
-    }
-  },
-  {
-    "model": "polls.choice",
-    "pk": 4,
-    "fields": {
-      "question": 1,
-      "choice_text": "Hard-boiled"
+      "choice_text": "3"
     }
   }
 ]

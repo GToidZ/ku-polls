@@ -9,6 +9,10 @@ from polls.tests.utils import (
 )
 
 
+def post_with(i):
+    return {"choice": i}  # For creating POST data
+
+
 class TestVoteView(TestCase):
     """
     Tests for the vote() view; containing,
@@ -63,9 +67,6 @@ class TestVoteView(TestCase):
                 user=self.user, choice__in=question.choice_set.all()
             )
 
-        def post_with(i):
-            return {"choice": i}  # For creating POST data
-
         self.client.post(url, post_with(choice1.id))
         self.assertEqual(fetch_vote().count(), 1)
         self.assertEqual(fetch_vote().first().choice, choice1)
@@ -77,3 +78,32 @@ class TestVoteView(TestCase):
         self.assertEqual(
             fetch_vote().first().choice, choice2
         )  # Checks if VoteData is changed
+
+    def test_question_does_not_exist_for_voting(self):
+        """When trying to vote for non-existant question, it should return 404"""
+        logged_in = self.client.login(
+            username=self.user.username, password="1234"
+        )
+        self.assertTrue(logged_in)  # Checks for authorization
+
+        url = reverse("polls:vote", args=(9999,))
+        resp = self.client.post(url, post_with(9999))
+
+        self.assertEqual(resp.status_code, 404)
+
+    def test_choice_does_not_exist_for_voting(self):
+        """When trying to vote for non-existant choice, it should show an error message"""
+        logged_in = self.client.login(
+            username=self.user.username, password="1234"
+        )
+        self.assertTrue(logged_in)  # Checks for authorization
+
+        question = new_question_with_relative_date("")
+        new_choice(question, "A")
+        question.save()
+
+        url = reverse("polls:vote", args=(question.id,))
+        resp = self.client.post(url, post_with(9999))
+
+        # Use &#x27; for substituting single-quote character.
+        self.assertContains(resp, "You didn&#x27;t choose a choice!")

@@ -38,19 +38,16 @@ def vote(request, question_id):
             "polls/details.html",
             {"question": question},
         )
-    else:
-        user = request.user
-        try:
-            data = VoteData.objects.get(
-                user=user, choice__in=question.choice_set.all()
-            )
-        except VoteData.DoesNotExist:
-            data = VoteData.objects.create(choice=selected_choice, user=user)
-            data.save()
-        else:
-            data.choice = selected_choice
-            data.save()
-        return redirect("polls:results", pk=question_id)
+    user = request.user
+    try:
+        data = VoteData.objects.get(
+            user=user, choice__in=question.choice_set.all()
+        )
+        data.choice = selected_choice
+        data.save()
+    except VoteData.DoesNotExist:
+        data = VoteData.objects.create(choice=selected_choice, user=user)
+    return redirect("polls:results", pk=question_id)
 
 
 class IndexView(generic.ListView):

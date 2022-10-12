@@ -104,3 +104,9 @@ class TestQuestionModel(TestCase):
         question.visibilty = False
         question.save()
         self.assertFalse(question.can_vote())
+
+    def test_question_model_str(self):
+        """Test for __str__ in Question"""
+        text = "Test Question"
+        question = new_question(text, timezone.now())
+        self.assertEqual(text, str(question))

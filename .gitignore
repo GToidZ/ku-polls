@@ -23,3 +23,9 @@ __pycache__/
 # Security-related
 settings.ini
 db.sqlite3
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache

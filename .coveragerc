@@ -1,0 +1,20 @@
+[run]
+branch = True
+omit =
+	# Django entry file
+	manage.py
+
+	# __init__ shouldn't be checked
+	*/__init__.py
+	
+	# Root app directory doesn't need to be covered
+	mysite/*
+
+	# Migrations, tests, admin and apps
+	*/migrations/*
+	*/tests/*
+	*/admin.py
+	*/apps.py
+
+	# Template tags
+	*/templatetags/*
