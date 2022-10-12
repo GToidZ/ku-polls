@@ -1,0 +1,55 @@
+name: "Test KU Polls"
+
+on:
+  push:
+    branches:
+      - "**"
+    paths-ignore:
+      - "README.md"
+  pull_request:
+    types:
+      - "opened"
+      - "reopened"
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: testing_key
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Lint with flake8
+        run: |
+          pip install flake8
+          flake8 --count .
+      - name: Test and generate coverage
+        run: |
+          pip install coverage
+          coverage run ./manage.py test polls
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+      - name: Update README badges
+        if: github.event_name == 'push'
+        env:
+          GHREF: "${{ github.ref_name }}"
+        run: |
+          UPDATE=$(cat README.md | perl -0777 -pe 's#(<!-- BEGIN BADGES -->)(?:.|\n)*?(<!-- END BADGES -->)#${1}\n![tests status](https://img.shields.io/github/workflow/status/GToidZ/ku-polls/Test%20KU%20Polls?label=Unit%20Tests&logo=github)\n[![codecov](https://codecov.io/gh/GToidZ/ku-polls/branch/${{ env.GHREF }}/graph/badge.svg?token=0SCEVDMAU0)](https://codecov.io/gh/GToidZ/ku-polls)\n${2}#g')
+          echo "${UPDATE}" > README.md
+      - uses: EndBug/add-and-commit@v9
+        if: github.event_name == 'push'
+        with:
+          add: "README.md"
+          default_author: github_actions
+          message: "readme.md: Update badges from workflow"
