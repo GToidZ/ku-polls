@@ -46,7 +46,7 @@ jobs:
         env:
           GHREF: "${{ github.ref_name }}"
         run: |
-          UPDATE=$(cat README.md | perl -0777 -pe 's#(<!-- BEGIN BADGES -->)(?:.|\n)*?(<!-- END BADGES -->)#${1}\n![tests status](https://img.shields.io/github/workflow/status/GToidZ/ku-polls/Test%20KU%20Polls?label=Unit%20Tests&logo=github)\n[![codecov](https://codecov.io/gh/GToidZ/ku-polls/branch/${{ env.GHREF }}/graph/badge.svg?token=0SCEVDMAU0)](https://codecov.io/gh/GToidZ/ku-polls)\n${2}#g')
+          UPDATE=$(cat README.md | perl -0777 -pe 's#(<!-- BEGIN BADGES -->)(?:.|\n)*?(<!-- END BADGES -->)#${1}\n[![tests status](https://img.shields.io/github/workflow/status/GToidZ/ku-polls/Test%20KU%20Polls?label=Unit%20Tests&logo=github)](https://github.com/GToidZ/ku-polls/actions/workflows/test.yml)\n[![codecov](https://codecov.io/gh/GToidZ/ku-polls/branch/${{ env.GHREF }}/graph/badge.svg?token=0SCEVDMAU0)](https://codecov.io/gh/GToidZ/ku-polls)\n${2}#g')
           echo "${UPDATE}" > README.md
       - uses: EndBug/add-and-commit@v9
         if: github.event_name == 'push'
